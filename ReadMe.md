@@ -156,4 +156,32 @@ You'll find some of the smaller, individual stretch challenges contained with th
   - The project must be done on time.
   - Running the simulation must still work the same. If there are any new required parameters these must be fully documented.
   - The output must adhere to the project description. 
-  
+
+## Questions and Answers about the problem
+
+- Q: Should we include the number of new infections at each step in the logged output? A: Yes include the number of new infections that happened each step in your log. 
+- Q: Should the initially infected group test their mortality against the virus? A: This is up to you. It is not specified in the doc. If the initially infected group tests their mortality they probably should do it at the end of the first time step. 
+- Q: Should I simulate different stages of the virus? For example: infected, incubation, self quarantine. Infectious time period. A: It's up to you. I recommend getting a basic simulation working first using simple rules before adding this since it will be more work. It's more important to get the work done on time than it is to add new features. 
+- Q: Should create a UI for a pygame simulation? A: Pygame doesn't include any UI controls. This makes it a lot of work to add a user interface. If you choose to use Pygame (its a stretch challenge) you can include variables at the top of your main.py that the researchers can adjust for each run of the simulation. 
+- Q: What should the logger output looks like? A: Include a header, a step for for each step the simulation ran, and a footer showing the final state of the populatio. Here are some details: 
+  - Header 
+    - Initial size of the population
+    - Initial number of infected people
+    - Name of the virus
+    - Stats for the virus
+    - Date the simulation was run
+  - For each time step log
+    - The number of new infections 
+    - The number of deaths
+    - Statistics for the current state of the population
+      - Total number of living people 
+      - Total number of dead people
+      - Total number of vaccinated people
+  - After simulation ends 
+    - Total living 
+    - Total dead
+    - Number of vaccinations 
+    - Why the simulation ended 
+    - Total number of interactions that happened in the simulation 
+    - Number of interactions that resulted in vaccination 
+    - Number of interactions that resulted in death
