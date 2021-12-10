@@ -24,7 +24,7 @@ class Person(object):
         # Only called if infection attribute is not None.
         if self.infection != None:
             randNum = random.random()
-            if randNum > virus.mortality_rate:
+            if randNum > self.infection.mortality_rate:
                 self.is_vaccinated = True
                 self.infection = None
                 return True
