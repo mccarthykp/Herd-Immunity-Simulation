@@ -9,11 +9,11 @@ class Simulation(object):
         self.next_person_id = 0 # Int
         self.virus = virus # Virus object
         self.initial_infected = initial_infected # Int
-        self.new_infections = 0
+        self.new_infections = 0 # Int
         self.total_infected = 0 # Int
-        self.initial_vax = num_vaccinated
-        self.num_vaccinated = num_vaccinated # int
-        self.new_deaths = 0
+        self.initial_vax = num_vaccinated # saved Int for logging
+        self.num_vaccinated = num_vaccinated # Int
+        self.new_deaths = 0 # Int
         self.total_dead = 0 # Int
         self.newly_infected = []
         self.current_infected = []
@@ -25,8 +25,6 @@ class Simulation(object):
 
         self.logger = Logger(self.file_name)
         self.logger.write_metadata(pop_size, num_vaccinated, virus.name, mortality_rate, virus.repro_rate)
-
-        self.run()
 
     def _create_population(self):
         population = []
@@ -76,6 +74,7 @@ class Simulation(object):
         self.curr_step += 1 
 
         # put people in groups depending on if they are infected or uninfected
+        self.current_infected = []
         for person in self.population:
             if person.is_alive == False:
                 pass
@@ -93,6 +92,7 @@ class Simulation(object):
                 
                 self.interaction(person, alive_uninfected_person)
 
+        
         # for all of the currently infected people 
         for person in self.current_infected:
             # if the infected person survives, they are no longer infected, are now "vaccinated", and we log it
@@ -109,7 +109,6 @@ class Simulation(object):
 
         self.current_infected = self.newly_infected
         self.newly_infected = []
-            
 
     # interactions between infected and uninfected ALIVE people
     def interaction(self, infected, uninfected):
@@ -119,28 +118,30 @@ class Simulation(object):
 
         # if the uninfected person is not vaccinated and gets the virus, we increment total and newly infected and log it
         if uninfected.is_vaccinated == False and self.virus.repro_rate >= random.random():
-            uninfected.infection = self.virus
-            self.total_infected += 1
-            self.newly_infected.append(uninfected)
-            self.new_infections += 1
-            self.logger.log_interaction(infected=infected._id, uninfected=uninfected._id, did_infect=True)
+            if uninfected.infection == None:
+                uninfected.infection = self.virus
+                self.total_infected += 1
+                self.newly_infected.append(uninfected)
+                self.new_infections += 1
+                self.logger.log_interaction(infected=infected._id, uninfected=uninfected._id, did_infect=True)
         else: # otherwise, log that they were not infected
             self.logger.log_interaction(infected=infected._id, uninfected=uninfected._id, did_infect=False)
 
     def run(self):
         while self.should_continue():
             self.time_step()
+            # print('Took a step')
+            self.logger.new_step(self.curr_step, self.new_infections, self.new_deaths, self.pop_size - self.total_dead, self.total_dead, self.num_vaccinated)
             self.new_infections = 0
             self.new_deaths = 0
-            # print('Took a step')
-            self.logger.new_step(self.curr_step, self.new_infections, self.new_deaths, len(self.current_infected) + len(self.current_uninfected), self.total_dead, self.num_vaccinated)
 
         if self.total_dead == self.pop_size:
             cause = 'Population Died'
         else: 
             cause = 'Virus Died'
             
-        self.logger.final_step(self.curr_step, len(self.current_uninfected), self.total_dead, self.num_vaccinated, cause, self.total_interactions, self.num_vaccinated - self.initial_vax, self.total_dead)
+        self.logger.final_step(self.curr_step, self.pop_size - self.total_dead, self.total_dead, self.num_vaccinated, cause, self.total_interactions, self.num_vaccinated - self.initial_vax, self.total_dead)
+
 
 if __name__ == "__main__":
     params = sys.argv[1:]

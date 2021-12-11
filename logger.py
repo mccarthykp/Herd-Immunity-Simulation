@@ -76,6 +76,6 @@ class Logger(object):
     def final_step(self, curr_step, total_living, total_dead, num_vaccinations, cause_of_end, total_interactions, num_interactions_vax, num_interactions_death):
         file_object = open(self.file_name, 'a')
 
-        file_object.write(f'Current Step: {curr_step}\Total Living: {total_living}\tTotal Deaths: {total_dead}\tNum Vaccinations:  {num_vaccinations}\tCause of Simulation End: {cause_of_end}\tTotal Interactions: {total_interactions}\t"Num Interactions Resulting in Vaccination: {num_interactions_vax}"\t"Num Interactions Resulting in Death: {num_interactions_death}"\n')
+        file_object.write(f'Total Living: {total_living}\tTotal Deaths: {total_dead}\tNum Vaccinations:  {num_vaccinations}\tCause of Simulation End: {cause_of_end}\tTotal Interactions: {total_interactions}\tNum Interactions Resulting in Vaccination: {num_interactions_vax}\tNum Interactions Resulting in Death: {num_interactions_death}\n')
 
         file_object.close()
