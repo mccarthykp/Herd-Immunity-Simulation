@@ -65,3 +65,17 @@ class Logger(object):
         file_object.write(survival)
 
         file_object.close()
+
+    def new_step(self, curr_step, new_infections, new_deaths, living_population, total_dead, total_vaccinated):
+        file_object = open(self.file_name, 'a')
+
+        file_object.write(f'Current Step: {curr_step}\tNew Infections: {new_infections}\tNew Deaths: {new_deaths}\tLiving Population: {living_population}\tTotal Dead: {total_dead}\tTotal Vaccinated: {total_vaccinated}\n')
+
+        file_object.close()
+
+    def final_step(self, curr_step, total_living, total_dead, num_vaccinations, cause_of_end, total_interactions, num_interactions_vax, num_interactions_death):
+        file_object = open(self.file_name, 'a')
+
+        file_object.write(f'Current Step: {curr_step}\Total Living: {total_living}\tTotal Deaths: {total_dead}\tNum Vaccinations:  {num_vaccinations}\tCause of Simulation End: {cause_of_end}\tTotal Interactions: {total_interactions}\t"Num Interactions Resulting in Vaccination: {num_interactions_vax}"\t"Num Interactions Resulting in Death: {num_interactions_death}"\n')
+
+        file_object.close()
