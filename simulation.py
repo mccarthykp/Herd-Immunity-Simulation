@@ -1,8 +1,9 @@
 import random, sys
 random.seed(42)
 from person import Person
-from logger import Logger
 from virus import Virus
+from logger import Logger
+
 class Simulation(object):
     def __init__(self, virus, pop_size, num_vaccinated, initial_infected=1):
         self.pop_size = pop_size # Int
@@ -53,7 +54,7 @@ class Simulation(object):
 
         return population
 
-    # we should continue as long as people are alive and someone still has the virus
+    # should continue as long as people are alive and someone still has the virus
     def should_continue(self):
         population_is_alive = False
         population_is_infected = False
@@ -64,16 +65,16 @@ class Simulation(object):
                 if person.infection != None:
                     population_is_infected = True
 
-        # we should continue if at least one person is alive and at least one person has the virus
+        # should continue if at least one person is alive and at least one person has the virus
         if population_is_alive and population_is_infected:
             return True
         return False
         
     def time_step(self):
-        # call interaction and increment it
+        # call interaction and increment by 1
         self.curr_step += 1 
 
-        # put people in groups depending on if they are infected or uninfected
+        # place people in groups depending on infected or uninfected
         self.current_infected = []
         for person in self.population:
             if person.is_alive == False:
@@ -95,12 +96,12 @@ class Simulation(object):
         
         # for all of the currently infected people 
         for person in self.current_infected:
-            # if the infected person survives, they are no longer infected, are now "vaccinated", and we log it
+            # if the infected person survives, they are no longer infected, are now "vaccinated", and gets logged
             if person.did_survive_infection():
                 self.num_vaccinated += 1
                 self.current_uninfected.append(person)
                 self.logger.log_infection_survival(person=person._id, did_die_from_infection=False)
-            else: # if they didn't survive, they are dead and we need to remove them from the population, newly_infected and total infected, incr the death count and log it
+            else: # if the infected person dies, they are dead and need to be removed from newly_infected and total infected, increment death count by 1 and log it
                 self.total_dead += 1
                 self.new_deaths += 1
                 self.logger.log_infection_survival(person=person._id, did_die_from_infection=True)
@@ -116,7 +117,7 @@ class Simulation(object):
         assert uninfected.is_alive == True
         self.total_interactions += 1
 
-        # if the uninfected person is not vaccinated and gets the virus, we increment total and newly infected and log it
+        # if the uninfected person is not vaccinated and gets the virus, increment total and newly infected and log it
         if uninfected.is_vaccinated == False and self.virus.repro_rate >= random.random():
             if uninfected.infection == None:
                 uninfected.infection = self.virus
@@ -158,8 +159,8 @@ if __name__ == "__main__":
         initial_infected = 1
 
     virus = Virus(name, repro_rate, mortality_rate)
-    # python3 simulation.py Ebola 100 0.9 0.7 25 1
-    # python3 simulation.py Ebola 100000 0.9 0.7 25000 10
     sim = Simulation(virus, pop_size, num_vaccinated, initial_infected)
 
+    # python3 simulation.py Ebola 100 0.9 0.7 25 1
+    # python3 simulation.py Ebola 100000 0.9 0.7 25000 10
     sim.run()
