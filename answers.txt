@@ -1,0 +1,15 @@
+1. What were the inputs you gave the simulation?
+  Population Size: 100,000
+  Number Vaccinated: 25,000
+  Virus Name: Ebola
+  Mortality Rate: 0.70
+  Reproductive Rate: 0.90
+
+2. What percentage of the population became infected at some point before the virus burned out?
+  By the third step of the Ebola Virus Simulation, 74.99% of the population had been infected. 
+
+3. What percentage of the population died from the virus?
+  52.49% of the population died as a result of the Ebola Virus. 
+
+4. Out of all interactions sick individuals had during the entire simulation, how many total interactions did we see where a vaccination saved a person from potentially becoming infected?
+  There were 7,909,173 interactions where being vaccinated saved the individual from becoming infected. 

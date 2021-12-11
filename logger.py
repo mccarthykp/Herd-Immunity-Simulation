@@ -4,7 +4,7 @@ class Logger(object):
     def __init__(self, file_name):
         self.file_name = file_name
 
-    def write_metadata(self, pop_size, vaccinated, virus_name, mortality_rate, repro_rate):
+    def write_metadata(self, pop_size, vaccinated, virus_name, mortality_rate, repro_rate, today):
         '''
         The simulation class should use this method immediately to log the specific
         parameters of the simulation as the first line of the file.
@@ -18,7 +18,7 @@ class Logger(object):
 
         file_object = open(self.file_name, 'w')
 
-        file_object.write(f'Population Size: {pop_size}\tNum_Vaccinated: {vaccinated}\tVirus: {virus_name}\tMortality Rate: {mortality_rate}\tReproduction Rate: {repro_rate}\n')
+        file_object.write(f'Population Size: {pop_size}\tNum_Vaccinated: {vaccinated}\tVirus: {virus_name}\tMortality Rate: {mortality_rate}\tReproduction Rate: {repro_rate}\tDate of Simulation: {today}\n')
 
         file_object.close()
 
@@ -73,9 +73,9 @@ class Logger(object):
 
         file_object.close()
 
-    def final_step(self, curr_step, total_living, total_dead, num_vaccinations, cause_of_end, total_interactions, num_interactions_vax, num_interactions_death):
+    def final_step(self, curr_step, total_living, total_dead, num_vaccinations, cause_of_end, total_interactions, num_interactions_vax, num_interactions_death, vax_interactions):
         file_object = open(self.file_name, 'a')
 
-        file_object.write(f'Total Living: {total_living}\tTotal Deaths: {total_dead}\tNum Vaccinations:  {num_vaccinations}\tCause of Simulation End: {cause_of_end}\tTotal Interactions: {total_interactions}\tNum Interactions Resulting in Vaccination: {num_interactions_vax}\tNum Interactions Resulting in Death: {num_interactions_death}\n')
+        file_object.write(f'Total Living: {total_living}\tTotal Deaths: {total_dead}\tNum Vaccinations:  {num_vaccinations}\tCause of Simulation End: {cause_of_end}\tTotal Interactions: {total_interactions}\tNum Interactions Resulting in Vaccination: {num_interactions_vax}\tNum Interactions Resulting in Death: {num_interactions_death}\tNum interactions where vaccination saved person: {vax_interactions}\n')
 
         file_object.close()

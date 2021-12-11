@@ -1,8 +1,11 @@
+import datetime
+from logger import Logger
+from person import Person
+
 import random, sys
 random.seed(42)
-from person import Person
+
 from virus import Virus
-from logger import Logger
 
 class Simulation(object):
     def __init__(self, virus, pop_size, num_vaccinated, initial_infected=1):
@@ -24,8 +27,13 @@ class Simulation(object):
         self.total_interactions = 0 # Int
         self.curr_step = 0 # Int
 
+        # answers to Qs
+        self.vaccinated_interactions = 0
+
         self.logger = Logger(self.file_name)
-        self.logger.write_metadata(pop_size, num_vaccinated, virus.name, mortality_rate, virus.repro_rate)
+        today = datetime.datetime.now()
+        today_str = today.strftime("%m-%d-%Y")
+        self.logger.write_metadata(pop_size, num_vaccinated, virus.name, mortality_rate, virus.repro_rate, today_str)
 
     def _create_population(self):
         population = []
@@ -88,8 +96,11 @@ class Simulation(object):
         for person in self.current_infected:
             for i in range(100):
                 alive_uninfected_person = random.choice(self.current_uninfected)
-                while alive_uninfected_person.is_alive == False:
+                while not alive_uninfected_person.is_alive:
                     alive_uninfected_person = random.choice(self.current_uninfected)
+
+                if alive_uninfected_person.is_vaccinated:
+                    self.vaccinated_interactions += 1
                 
                 self.interaction(person, alive_uninfected_person)
 
@@ -141,7 +152,7 @@ class Simulation(object):
         else: 
             cause = 'Virus Died'
             
-        self.logger.final_step(self.curr_step, self.pop_size - self.total_dead, self.total_dead, self.num_vaccinated, cause, self.total_interactions, self.num_vaccinated - self.initial_vax, self.total_dead)
+        self.logger.final_step(self.curr_step, self.pop_size - self.total_dead, self.total_dead, self.num_vaccinated, cause, self.total_interactions, self.num_vaccinated - self.initial_vax, self.total_dead, self.vaccinated_interactions)
 
 
 if __name__ == "__main__":
@@ -163,4 +174,6 @@ if __name__ == "__main__":
 
     # python3 simulation.py Ebola 100 0.9 0.7 25 1
     # python3 simulation.py Ebola 100000 0.9 0.7 25000 10
+    start_time = datetime.datetime.now()
     sim.run()
+    print(f'Simulation execution time: {datetime.datetime.now() - start_time}')
